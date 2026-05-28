@@ -1,8 +1,8 @@
-# MiMo 语音合成工作室
+# WebTTS
 
 > **[English](README.md)**
 
-基于小米 MiMo-V2.5-TTS 的网页端语音合成工具。支持预置音色、音色设计、音色克隆、音频标签、导演模式、批量合成等功能。
+基于 MiMo-V2.5-TTS 的网页端语音合成工具。支持预置音色、音色设计、音色克隆、音频标签、导演模式、批量合成等功能。
 
 ## 功能特性
 
@@ -25,8 +25,8 @@
 
 ## 快速开始
 
-1. 前往 [MiMo 平台](https://platform.xiaomimimo.com/console/apikey) 获取 API Key
-2. 在浏览器中打开 `mimo-tts.html`
+1. 前往 [MiMo 开放平台](https://platform.xiaomimimo.com/console/apikey) 获取 API Key
+2. 在浏览器中打开 `index.html`
 3. 粘贴 API Key
 4. 输入文本，点击「开始合成」
 

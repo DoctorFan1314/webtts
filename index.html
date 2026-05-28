@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MiMo 语音合成工作室</title>
+    <title>WebTTS - 语音合成工作室</title>
     <style>
         :root {
             --primary: #667eea;
@@ -397,13 +397,13 @@
     <div class="onboarding-card">
         <div class="onboarding-step active" data-step="0">
             <div class="onboarding-icon">🎤</div>
-            <div class="onboarding-title">欢迎使用 MiMo TTS</div>
-            <div class="onboarding-desc">小米 MiMo-V2.5 语音合成工作室，支持预置音色、音色设计、音色克隆三大模式，让语音合成更自由。</div>
+            <div class="onboarding-title">欢迎使用 WebTTS</div>
+            <div class="onboarding-desc">基于 MiMo-V2.5-TTS 的语音合成工具，支持预置音色、音色设计、音色克隆三大模式，让语音合成更自由。</div>
         </div>
         <div class="onboarding-step" data-step="1">
             <div class="onboarding-icon">🔑</div>
             <div class="onboarding-title">获取 API Key</div>
-            <div class="onboarding-desc">前往 <a href="https://platform.xiaomimimo.com/console/apikey" target="_blank" style="color: var(--primary);">MiMo 平台</a> 获取免费 API Key，粘贴到页面顶部即可。当前限时免费使用！</div>
+            <div class="onboarding-desc">前往 <a href="https://platform.xiaomimimo.com/console/apikey" target="_blank" style="color: var(--primary);">MiMo 开放平台</a> 获取免费 API Key，粘贴到页面顶部即可。当前限时免费使用！</div>
         </div>
         <div class="onboarding-step" data-step="2">
             <div class="onboarding-icon">🎯</div>
@@ -430,7 +430,7 @@
 
 <header class="header">
     <div class="header-left">
-        <div class="logo">MiMo TTS</div>
+        <div class="logo">WebTTS</div>
         <div class="header-subtitle">语音合成工作室 v2.5</div>
     </div>
     <div class="header-actions">
@@ -452,7 +452,7 @@
             <div class="form-group">
                 <label>API Key</label>
                 <div class="key-input-wrapper">
-                    <input type="password" id="apiKey" placeholder="输入你的 MiMo API Key">
+                    <input type="password" id="apiKey" placeholder="输入你的 API Key">
                     <button class="key-toggle" onclick="toggleKeyVisibility()">👁</button>
                 </div>
                 <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">
@@ -922,7 +922,7 @@
         <div style="line-height: 1.8; font-size: 14px; color: var(--text-secondary);">
             <h3 style="color: var(--text); margin: 15px 0 10px;">快速开始</h3>
             <ol style="padding-left: 20px;">
-                <li>在 <a href="https://platform.xiaomimimo.com" target="_blank" style="color: var(--primary);">MiMo 平台</a> 获取 API Key</li>
+                <li>在 <a href="https://platform.xiaomimimo.com" target="_blank" style="color: var(--primary);">MiMo 开放平台</a> 获取 API Key</li>
                 <li>选择合成模式（预置音色 / 音色设计 / 音色克隆）</li>
                 <li>输入要合成的文本</li>
                 <li>选择音色和风格</li>
@@ -989,7 +989,7 @@
 </div>
 
 <footer class="footer">
-    Powered by Xiaomi MiMo-V2.5-TTS | 当前限时免费 |
+    Powered by MiMo-V2.5-TTS | 当前限时免费 |
     <a href="https://platform.xiaomimimo.com/docs/zh-CN/usage-guide/speech-synthesis-v2.5" target="_blank" style="color: var(--primary);">官方文档</a>
 </footer>
 
@@ -1524,7 +1524,7 @@
         btn.className = 'btn btn-block btn-cancel';
         btn.onclick = cancelSynthesis;
 
-        showStatus('正在调用 MiMo API，请稍候...', 'loading');
+        showStatus('正在调用 API，请稍候...', 'loading');
         animateWave(true);
 
         try {
