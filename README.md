@@ -39,6 +39,10 @@ A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Supports preset voic
 - Pure HTML / CSS / JavaScript (single file, no dependencies)
 - MiMo-V2.5-TTS API (OpenAI-compatible format)
 
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
 ## License
 
 MIT

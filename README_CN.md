@@ -39,6 +39,10 @@
 - 纯 HTML / CSS / JavaScript（单文件，无依赖）
 - MiMo-V2.5-TTS API（兼容 OpenAI 格式）
 
+## 参与贡献
+
+欢迎参与贡献！请查看 [CONTRIBUTING_CN.md](CONTRIBUTING_CN.md)。
+
 ## 许可证
 
 MIT
