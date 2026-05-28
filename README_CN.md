@@ -2,7 +2,7 @@
 
 > **[English](README.md)**
 
-基于 MiMo-V2.5-TTS 的网页端语音合成工具。支持预置音色、音色设计、音色克隆、音频标签、导演模式、批量合成等功能。
+基于 MiMo-V2.5-TTS 的网页端语音合成工具，使用 TypeScript + Vite 构建。
 
 ## 功能特性
 
@@ -25,10 +25,45 @@
 
 ## 快速开始
 
-1. 前往 [MiMo 开放平台](https://platform.xiaomimimo.com/console/apikey) 获取 API Key
-2. 在浏览器中打开 `index.html`
-3. 粘贴 API Key
-4. 输入文本，点击「开始合成」
+```bash
+npm install
+npm run dev
+```
+
+然后打开终端显示的本地 URL。
+
+## 构建
+
+```bash
+npm run build        # 构建到 dist/
+npm run preview      # 预览构建产物
+```
+
+## 项目结构
+
+```
+src/
+├── main.ts              # 入口
+├── api.ts               # API 调用封装
+├── state.ts             # 全局状态管理
+├── storage.ts           # localStorage 操作
+├── types.ts             # 类型定义
+├── shortcuts.ts         # 快捷键
+├── style.css            # 样式
+├── index.html           # HTML 模板
+└── components/
+    ├── synth.ts         # 核心合成逻辑
+    ├── voice-design.ts  # 音色设计
+    ├── voice-clone.ts   # 音色克隆
+    ├── audio-tags.ts    # 音频标签
+    ├── director.ts      # 导演模式
+    ├── batch.ts         # 批量合成
+    ├── history.ts       # 历史记录
+    ├── templates.ts     # 快捷模板
+    ├── onboarding.ts    # 新手引导
+    ├── wave.ts          # 波形可视化
+    └── ui-helpers.ts    # UI 工具函数
+```
 
 ## API 参考
 
@@ -36,7 +71,7 @@
 
 ## 技术栈
 
-- 纯 HTML / CSS / JavaScript（单文件，无依赖）
+- TypeScript + Vite
 - MiMo-V2.5-TTS API（兼容 OpenAI 格式）
 
 ## 参与贡献

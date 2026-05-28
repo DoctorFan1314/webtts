@@ -1,0 +1,26 @@
+{
+  "name": "webtts",
+  "version": "2.5.0",
+  "description": "Web-based TTS studio powered by MiMo-V2.5-TTS",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DoctorFan1314/webtts.git"
+  },
+  "keywords": ["tts", "speech-synthesis", "mimo"],
+  "author": "DoctorFan1314",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DoctorFan1314/webtts/issues"
+  },
+  "homepage": "https://github.com/DoctorFan1314/webtts#readme",
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.0.14"
+  }
+}

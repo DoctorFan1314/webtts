@@ -2,7 +2,7 @@
 
 > **[中文文档](README_CN.md)**
 
-A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Supports preset voices, voice design, voice cloning, audio tags, director mode, batch synthesis, and more.
+A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Built with TypeScript + Vite.
 
 ## Features
 
@@ -25,10 +25,46 @@ A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Supports preset voic
 
 ## Quick Start
 
-1. Get your API Key from [MiMo Platform](https://platform.xiaomimimo.com/console/apikey)
-2. Open `index.html` in your browser
-3. Paste your API Key
-4. Enter text and click "Start Synthesis"
+```bash
+npm install
+npm run dev
+```
+
+Then open the local URL shown in terminal.
+
+## Build
+
+```bash
+npm run build        # Build to dist/
+npm run preview      # Preview production build
+```
+
+## Project Structure
+
+```
+src/
+├── main.ts              # Entry point
+├── api.ts               # MiMo API wrapper
+├── state.ts             # Global state management
+├── storage.ts           # localStorage operations
+├── types.ts             # TypeScript type definitions
+├── shortcuts.ts         # Keyboard shortcuts
+├── style.css            # Styles
+├── index.html           # HTML template
+└── components/
+    ├── synth.ts         # Core synthesis logic
+    ├── mode-switch.ts   # Mode switching
+    ├── voice-design.ts  # Voice design
+    ├── voice-clone.ts   # Voice clone
+    ├── audio-tags.ts    # Audio tags
+    ├── director.ts      # Director mode
+    ├── batch.ts         # Batch synthesis
+    ├── history.ts       # History management
+    ├── templates.ts     # Quick templates
+    ├── onboarding.ts    # Onboarding tutorial
+    ├── wave.ts          # Wave visualizer
+    └── ui-helpers.ts    # UI utility functions
+```
 
 ## API Reference
 
@@ -36,7 +72,7 @@ A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Supports preset voic
 
 ## Tech Stack
 
-- Pure HTML / CSS / JavaScript (single file, no dependencies)
+- TypeScript + Vite
 - MiMo-V2.5-TTS API (OpenAI-compatible format)
 
 ## Contributing

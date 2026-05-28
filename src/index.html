@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebTTS - 语音合成工作室</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎤</text></svg>">
+</head>
+<body>
+
+<!-- Onboarding -->
+<div class="onboarding-overlay" id="onboarding">
+    <div class="onboarding-card">
+        <div class="onboarding-step active" data-step="0">
+            <div class="onboarding-icon">🎤</div>
+            <div class="onboarding-title">欢迎使用 WebTTS</div>
+            <div class="onboarding-desc">基于 MiMo-V2.5-TTS 的语音合成工具，支持预置音色、音色设计、音色克隆三大模式，让语音合成更自由。</div>
+        </div>
+        <div class="onboarding-step" data-step="1">
+            <div class="onboarding-icon">🔑</div>
+            <div class="onboarding-title">获取 API Key</div>
+            <div class="onboarding-desc">前往 <a href="https://platform.xiaomimimo.com/console/apikey" target="_blank" style="color: var(--primary);">MiMo 开放平台</a> 获取免费 API Key，粘贴到页面顶部即可。当前限时免费使用！</div>
+        </div>
+        <div class="onboarding-step" data-step="2">
+            <div class="onboarding-icon">🎯</div>
+            <div class="onboarding-title">三种合成模式</div>
+            <div class="onboarding-desc"><strong>预置音色</strong>：8种精品音色开箱即用<br><strong>音色设计</strong>：用文字描述你想要的声音<br><strong>音色克隆</strong>：上传音频样本复刻任意音色</div>
+        </div>
+        <div class="onboarding-step" data-step="3">
+            <div class="onboarding-icon">⚡</div>
+            <div class="onboarding-title">风格控制</div>
+            <div class="onboarding-desc">支持自然语言描述风格、音频标签精细控制、导演模式等多种方式。还可以批量合成、搜索历史记录！</div>
+        </div>
+        <div class="onboarding-dots">
+            <div class="onboarding-dot active"></div>
+            <div class="onboarding-dot"></div>
+            <div class="onboarding-dot"></div>
+            <div class="onboarding-dot"></div>
+        </div>
+        <div class="onboarding-actions">
+            <button class="btn btn-outline btn-sm">跳过</button>
+            <button class="btn btn-sm" id="onboardingNextBtn">下一步</button>
+        </div>
+    </div>
+</div>
+
+<header class="header">
+    <div class="header-left">
+        <div class="logo">WebTTS</div>
+        <div class="header-subtitle">语音合成工作室 v2.5</div>
+    </div>
+    <div class="header-actions">
+        <button class="icon-btn tooltip" data-tip="快捷键 (?)" data-action="shortcuts">⌨</button>
+        <button class="icon-btn tooltip" data-tip="使用帮助" data-action="help">?</button>
+        <button class="icon-btn tooltip" data-tip="切换主题" data-action="theme">◐</button>
+    </div>
+</header>
+
+<main class="main">
+    <div class="left-panel">
+        <div class="card">
+            <div class="card-title">
+                <div class="icon">🎤</div>
+                语音合成
+            </div>
+
+            <!-- API Key -->
+            <div class="form-group">
+                <label>API Key</label>
+                <div class="key-input-wrapper">
+                    <input type="password" id="apiKey" placeholder="输入你的 API Key">
+                    <button class="key-toggle" id="keyToggle">👁</button>
+                </div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 5px;">
+                    <a href="https://platform.xiaomimimo.com/console/apikey" target="_blank" style="color: var(--primary);">获取 API Key</a>
+                    · 自动保存到本地
+                </div>
+            </div>
+
+            <!-- Mode Selector -->
+            <div class="form-group">
+                <label>合成模式</label>
+                <div class="mode-selector">
+                    <button class="mode-btn active" data-mode="preset">
+                        <span class="mode-icon">🎵</span>
+                        <span>预置音色</span>
+                    </button>
+                    <button class="mode-btn" data-mode="design">
+                        <span class="mode-icon">🎨</span>
+                        <span>音色设计</span>
+                    </button>
+                    <button class="mode-btn" data-mode="clone">
+                        <span class="mode-icon">🧬</span>
+                        <span>音色克隆</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Panel: Preset Voice -->
+            <div class="mode-panel active" id="panel-preset">
+                <div class="row">
+                    <div class="form-group">
+                        <label>音色</label>
+                        <select id="voice">
+                            <option value="冰糖">🍬 冰糖（中文女声）</option>
+                            <option value="茉莉">🌸 茉莉（中文女声）</option>
+                            <option value="苏打">🥤 苏打（中文男声）</option>
+                            <option value="白桦">🌳 白桦（中文男声）</option>
+                            <option value="Mia">Mia（英文女声）</option>
+                            <option value="Chloe">Chloe（英文女声）</option>
+                            <option value="Milo">Milo（英文男声）</option>
+                            <option value="Dean">Dean（英文男声）</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>格式</label>
+                        <select id="format">
+                            <option value="wav">WAV（无损）</option>
+                            <option value="mp3">MP3（压缩）</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel: Voice Design -->
+            <div class="mode-panel" id="panel-design">
+                <div class="form-group">
+                    <label>音色描述</label>
+                    <textarea id="voiceDesc" placeholder="描述你想要的音色，例如：&#10;一位年迈的老先生，语速缓慢而沉稳，嗓音略带沙哑和沧桑感" style="min-height: 80px;"></textarea>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">
+                        描述越具体越好。涵盖：性别年龄、音色质感、情绪语气、语速节奏
+                    </div>
+                    <div class="dimension-tags">
+                        <span class="dim-tag" data-voice-desc="年轻女性">👩 年轻女性</span>
+                        <span class="dim-tag" data-voice-desc="中年男性">👨 中年男性</span>
+                        <span class="dim-tag" data-voice-desc="磁性低沉">🎙 磁性低沉</span>
+                        <span class="dim-tag" data-voice-desc="甜美清亮">🔔 甜美清亮</span>
+                        <span class="dim-tag" data-voice-desc="语速缓慢">🐢 语速缓慢</span>
+                        <span class="dim-tag" data-voice-desc="语速极快">⚡ 语速极快</span>
+                        <span class="dim-tag" data-voice-desc="温柔治愈">💕 温柔治愈</span>
+                        <span class="dim-tag" data-voice-desc="活力四射">🔥 活力四射</span>
+                        <span class="dim-tag" data-voice-desc="ASMR耳语">🎧 ASMR</span>
+                        <span class="dim-tag" data-voice-desc="深夜电台DJ">📻 电台DJ</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>预设音色模板</label>
+                    <div class="voice-presets">
+                        <div class="voice-preset" data-preset="asmr"><div class="preset-icon">🎧</div><div>ASMR耳语</div></div>
+                        <div class="voice-preset" data-preset="radio"><div class="preset-icon">📻</div><div>深夜电台</div></div>
+                        <div class="voice-preset" data-preset="narrator"><div class="preset-icon">📖</div><div>纪录片旁白</div></div>
+                        <div class="voice-preset" data-preset="storyteller"><div class="preset-icon">👴</div><div>评书先生</div></div>
+                        <div class="voice-preset" data-preset="podcast"><div class="preset-icon">🎙</div><div>播客主持</div></div>
+                        <div class="voice-preset" data-preset="child"><div class="preset-icon">👧</div><div>童声</div></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="settings-label">
+                        <div>
+                            <div class="settings-title" style="font-size: 13px;">智能润色文本</div>
+                            <div class="settings-desc">开启后可只输入音色描述，自动生成适配文本</div>
+                        </div>
+                        <div class="toggle" id="toggleOptimize"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group">
+                        <label>格式</label>
+                        <select id="format-design">
+                            <option value="wav">WAV（无损）</option>
+                            <option value="mp3">MP3（压缩）</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Panel: Voice Clone -->
+            <div class="mode-panel" id="panel-clone">
+                <div class="form-group">
+                    <label>上传音频样本</label>
+                    <div class="upload-zone" id="uploadZone">
+                        <div class="upload-icon">📁</div>
+                        <div class="upload-text">点击或拖拽音频文件到此处</div>
+                        <div class="upload-hint">支持 MP3 / WAV，最大 10MB</div>
+                    </div>
+                    <input type="file" id="cloneFile" accept=".mp3,.wav,audio/mpeg,audio/wav" style="display: none;">
+                </div>
+                <div class="clone-preview" id="clonePreview">
+                    <div class="clone-file-info" id="cloneFileInfo"></div>
+                    <audio id="cloneAudioPlayer" controls></audio>
+                    <button class="btn btn-sm btn-outline" style="margin-top: 8px;">移除文件</button>
+                </div>
+                <div class="row" style="margin-top: 12px;">
+                    <div class="form-group">
+                        <label>格式</label>
+                        <select id="format-clone">
+                            <option value="wav">WAV（无损）</option>
+                            <option value="mp3">MP3（压缩）</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Synthesis Text -->
+            <div class="form-group">
+                <label>合成文本</label>
+                <div class="singing-banner" id="singingBanner">
+                    🎤 唱歌模式已开启 — 文本将自动添加 (唱歌) 标签
+                </div>
+                <textarea id="text" placeholder="输入要合成的文本内容...&#10;&#10;支持多段落，每段将自然衔接。&#10;支持拖拽 .txt 文件到此处"></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span> 字 · 预估 <span id="duration">0</span> 秒
+                </div>
+            </div>
+
+            <!-- Audio Tags -->
+            <div class="audio-tags-section">
+                <div class="tags-header">
+                    <label style="margin: 0;">音频标签 <span style="font-size: 11px; color: var(--text-secondary);">（点击插入到文本中）</span></label>
+                    <span class="tags-toggle-icon" id="tagsToggleIcon">▼</span>
+                </div>
+                <div class="tags-body" id="tagsBody">
+                    <div class="tag-category">
+                        <div class="tag-category-title">语速与节奏</div>
+                        <div class="tag-items">
+                            <span class="audio-tag" data-tag="吸气">吸气</span>
+                            <span class="audio-tag" data-tag="深呼吸">深呼吸</span>
+                            <span class="audio-tag" data-tag="叹气">叹气</span>
+                            <span class="audio-tag" data-tag="长叹一口气">长叹一口气</span>
+                            <span class="audio-tag" data-tag="喘息">喘息</span>
+                            <span class="audio-tag" data-tag="屏息">屏息</span>
+                            <span class="audio-tag" data-tag="语速加快">语速加快</span>
+                            <span class="audio-tag" data-tag="语速放慢">语速放慢</span>
+                        </div>
+                    </div>
+                    <div class="tag-category">
+                        <div class="tag-category-title">情绪状态</div>
+                        <div class="tag-items">
+                            <span class="audio-tag" data-tag="紧张">紧张</span>
+                            <span class="audio-tag" data-tag="害怕">害怕</span>
+                            <span class="audio-tag" data-tag="激动">激动</span>
+                            <span class="audio-tag" data-tag="疲惫">疲惫</span>
+                            <span class="audio-tag" data-tag="委屈">委屈</span>
+                            <span class="audio-tag" data-tag="撒娇">撒娇</span>
+                            <span class="audio-tag" data-tag="心虚">心虚</span>
+                            <span class="audio-tag" data-tag="震惊">震惊</span>
+                            <span class="audio-tag" data-tag="不耐烦">不耐烦</span>
+                        </div>
+                    </div>
+                    <div class="tag-category">
+                        <div class="tag-category-title">语音特征</div>
+                        <div class="tag-items">
+                            <span class="audio-tag" data-tag="颤抖">颤抖</span>
+                            <span class="audio-tag" data-tag="声音颤抖">声音颤抖</span>
+                            <span class="audio-tag" data-tag="变调">变调</span>
+                            <span class="audio-tag" data-tag="破音">破音</span>
+                            <span class="audio-tag" data-tag="鼻音">鼻音</span>
+                            <span class="audio-tag" data-tag="气声">气声</span>
+                            <span class="audio-tag" data-tag="沙哑">沙哑</span>
+                        </div>
+                    </div>
+                    <div class="tag-category">
+                        <div class="tag-category-title">哭笑表达</div>
+                        <div class="tag-items">
+                            <span class="audio-tag" data-tag="笑">笑</span>
+                            <span class="audio-tag" data-tag="轻笑">轻笑</span>
+                            <span class="audio-tag" data-tag="大笑">大笑</span>
+                            <span class="audio-tag" data-tag="冷笑">冷笑</span>
+                            <span class="audio-tag" data-tag="苦笑">苦笑</span>
+                            <span class="audio-tag" data-tag="抽泣">抽泣</span>
+                            <span class="audio-tag" data-tag="呜咽">呜咽</span>
+                            <span class="audio-tag" data-tag="哽咽">哽咽</span>
+                            <span class="audio-tag" data-tag="嚎啕大哭">嚎啕大哭</span>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 5px;">
+                        💡 标签会插入到光标位置，格式为 [标签名]，嵌入到合成文本中
+                    </div>
+                </div>
+            </div>
+
+            <!-- Style Control -->
+            <div class="form-group" style="margin-top: 15px;">
+                <label>风格指令（自然语言，可选）</label>
+                <input type="text" id="style" placeholder="描述你想要的语音风格...">
+                <div class="style-tags">
+                    <span class="style-tag" data-style="温柔">温柔</span>
+                    <span class="style-tag" data-style="活泼">活泼</span>
+                    <span class="style-tag" data-style="磁性">磁性</span>
+                    <span class="style-tag" data-style="严肃">严肃</span>
+                    <span class="style-tag" data-style="慵懒">慵懒</span>
+                    <span class="style-tag" data-style="俏皮">俏皮</span>
+                    <span class="style-tag" data-style="深沉">深沉</span>
+                    <span class="style-tag" data-style="沙哑">沙哑</span>
+                    <span class="style-tag" data-style="甜美">甜美</span>
+                    <span class="style-tag" data-style="御姐音">御姐音</span>
+                    <span class="style-tag" data-style="正太音">正太音</span>
+                    <span class="style-tag" data-style="大叔音">大叔音</span>
+                    <span class="style-tag" data-style="台湾腔">台湾腔</span>
+                    <span class="style-tag" data-style="东北话">东北话</span>
+                    <span class="style-tag" data-style="四川话">四川话</span>
+                    <span class="style-tag" data-style="粤语">粤语</span>
+                    <span class="style-tag" data-style="河南话">河南话</span>
+                    <span class="style-tag" data-style="新闻播报">新闻播报</span>
+                    <span class="style-tag" data-style="讲故事">讲故事</span>
+                    <span class="style-tag" data-style="耳语">耳语</span>
+                </div>
+            </div>
+
+            <!-- Director Mode -->
+            <div class="director-section">
+                <div class="director-toggle">
+                    <span>🎬</span>
+                    <span>导演模式（高级）</span>
+                    <span style="margin-left: auto;" id="directorArrow">▶</span>
+                </div>
+                <div class="director-fields" id="directorFields">
+                    <div class="director-presets" style="margin-bottom: 10px;">
+                        <span class="dim-tag" data-director="romance">古装言情</span>
+                        <span class="dim-tag" data-director="noir">悬疑推理</span>
+                        <span class="dim-tag" data-director="comedy">喜剧搞笑</span>
+                        <span class="dim-tag" data-director="epic">史诗宏大</span>
+                    </div>
+                    <div class="form-group">
+                        <label>角色</label>
+                        <textarea id="directorRole" placeholder="人物身份、性格底色、说话习惯..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>场景</label>
+                        <textarea id="directorScene" placeholder="发生了什么、和谁说话、情绪状态..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>指导</label>
+                        <textarea id="directorGuide" placeholder="语速、气息、停顿、重音、共鸣、音色质感..."></textarea>
+                    </div>
+                    <button class="btn btn-sm btn-outline" style="margin-bottom: 10px;">📝 合成为风格指令</button>
+                </div>
+            </div>
+
+            <!-- Singing Mode -->
+            <div class="form-group" style="margin-top: 10px;">
+                <div class="settings-label">
+                    <div>
+                        <div class="settings-title" style="font-size: 13px;">🎤 唱歌模式</div>
+                        <div class="settings-desc">开启后文本自动添加 (唱歌) 标签</div>
+                    </div>
+                    <div class="toggle" id="toggleSinging"></div>
+                </div>
+            </div>
+
+            <!-- Batch Mode -->
+            <div class="form-group">
+                <div class="settings-label">
+                    <div>
+                        <div class="settings-title" style="font-size: 13px;">📋 批量合成</div>
+                        <div class="settings-desc">多段文本逐个合成</div>
+                    </div>
+                    <div class="toggle" id="toggleBatch"></div>
+                </div>
+            </div>
+            <div class="batch-section" id="batchSection">
+                <div class="form-group">
+                    <label>批量文本（每行一段，或用 --- 分隔）</label>
+                    <textarea id="batchText" class="batch-textarea" placeholder="第一段文本&#10;---&#10;第二段文本&#10;---&#10;第三段文本"></textarea>
+                </div>
+            </div>
+
+            <!-- Synthesize Button -->
+            <button class="btn btn-block" id="synthesizeBtn">▶ 开始合成</button>
+
+            <div class="status" id="status"></div>
+
+            <div class="player-section" id="playerSection">
+                <label>合成结果</label>
+                <div class="wave-visualizer" id="waveVisualizer"></div>
+                <audio id="audioPlayer" controls></audio>
+                <div class="download-actions">
+                    <a class="btn btn-sm btn-success" id="downloadLink" href="#" download>⬇ 下载音频</a>
+                    <button class="btn btn-sm btn-outline" id="copyUrlBtn">📋 复制链接</button>
+                    <button class="btn btn-sm btn-outline" id="saveHistoryBtn">💾 保存记录</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Templates -->
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-title">
+                <div class="icon">📝</div>
+                快捷模板
+            </div>
+            <div class="templates-grid">
+                <div class="template-card" data-template="news"><div class="template-name">📰 新闻播报</div><div class="template-desc">专业新闻播报风格</div></div>
+                <div class="template-card" data-template="weather"><div class="template-name">🌤 天气预报</div><div class="template-desc">轻松天气播报</div></div>
+                <div class="template-card" data-template="story"><div class="template-name">📖 睡前故事</div><div class="template-desc">温柔讲故事风格</div></div>
+                <div class="template-card" data-template="ad"><div class="template-name">📢 广告配音</div><div class="template-desc">活力广告风格</div></div>
+                <div class="template-card" data-template="meditation"><div class="template-name">🧘 冥想引导</div><div class="template-desc">舒缓放松风格</div></div>
+                <div class="template-card" data-template="education"><div class="template-name">📚 教学讲解</div><div class="template-desc">清晰教学风格</div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Panel -->
+    <div class="right-panel">
+        <div class="card">
+            <div class="tab-bar">
+                <div class="tab active" data-tab="history">历史记录</div>
+                <div class="tab" data-tab="settings">设置</div>
+            </div>
+
+            <div class="tab-content active" id="tab-history">
+                <div class="history-search">
+                    <input type="text" id="historySearchInput" placeholder="搜索历史记录...">
+                </div>
+                <div class="history-list" id="historyList">
+                    <div class="empty-state">暂无历史记录</div>
+                </div>
+                <div class="history-actions-bar">
+                    <button class="btn btn-sm btn-outline" id="exportHistoryBtn">📤 导出</button>
+                    <button class="btn btn-sm btn-outline" id="importHistoryBtn">📥 导入</button>
+                    <input type="file" id="importHistoryFile" accept=".json" style="display: none;">
+                    <button class="btn btn-sm btn-danger" id="clearHistoryBtn">🗑 清空</button>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-settings">
+                <div class="settings-group">
+                    <div class="settings-label">
+                        <div><div class="settings-title">自动播放</div><div class="settings-desc">合成完成后自动播放音频</div></div>
+                        <div class="toggle active" data-setting="autoplay"></div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="settings-label">
+                        <div><div class="settings-title">自动下载</div><div class="settings-desc">合成完成后自动下载音频</div></div>
+                        <div class="toggle" data-setting="autodownload"></div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="settings-label">
+                        <div><div class="settings-title">保存历史</div><div class="settings-desc">自动保存合成记录</div></div>
+                        <div class="toggle active" data-setting="savehistory"></div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="settings-label">
+                        <div><div class="settings-title">显示字数统计</div><div class="settings-desc">显示字符数和预估时长</div></div>
+                        <div class="toggle active" data-setting="charcount"></div>
+                    </div>
+                </div>
+                <div class="settings-group">
+                    <div class="settings-label">
+                        <div><div class="settings-title">首次显示引导</div><div class="settings-desc">下次打开时显示新手引导</div></div>
+                        <div class="toggle active" data-setting="onboarding"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <div class="card-title">
+                <div class="icon">💡</div>
+                使用提示
+            </div>
+            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
+                <p>• <strong>Ctrl + Enter</strong> 快速合成</p>
+                <p>• <strong>Ctrl + S</strong> 下载当前音频</p>
+                <p>• <strong>Ctrl + D</strong> 切换暗色模式</p>
+                <p>• 支持自然语言描述风格</p>
+                <p>• 支持 [音频标签] 精细控制</p>
+                <p>• 文本放在 assistant 消息中</p>
+                <p>• 风格放在 user 消息中</p>
+                <p>• 当前限时免费</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Help Modal -->
+<div class="modal-overlay" id="helpModal">
+    <div class="modal">
+        <div class="modal-title">使用帮助</div>
+        <div style="line-height: 1.8; font-size: 14px; color: var(--text-secondary);">
+            <h3 style="color: var(--text); margin: 15px 0 10px;">快速开始</h3>
+            <ol style="padding-left: 20px;">
+                <li>在 <a href="https://platform.xiaomimimo.com" target="_blank" style="color: var(--primary);">MiMo 开放平台</a> 获取 API Key</li>
+                <li>选择合成模式（预置音色 / 音色设计 / 音色克隆）</li>
+                <li>输入要合成的文本</li>
+                <li>选择音色和风格</li>
+                <li>点击「开始合成」</li>
+            </ol>
+            <h3 style="color: var(--text); margin: 15px 0 10px;">三种合成模式</h3>
+            <p><strong>🎵 预置音色</strong>：8种精品音色开箱即用</p>
+            <p><strong>🎨 音色设计</strong>：用文字描述自定义音色（如"深夜电台DJ"）</p>
+            <p><strong>🧬 音色克隆</strong>：上传音频样本复刻任意音色</p>
+            <h3 style="color: var(--text); margin: 15px 0 10px;">风格控制</h3>
+            <p>三种方式：</p>
+            <p>1. <strong>自然语言</strong>：在「风格指令」框描述</p>
+            <p>2. <strong>音频标签</strong>：在文本中插入 [叹气]、[笑]、[哽咽] 等标签</p>
+            <p>3. <strong>导演模式</strong>：从角色、场景、指导三维度精细控制</p>
+        </div>
+        <button class="btn btn-block" style="margin-top: 20px;" id="closeHelpBtn">关闭</button>
+    </div>
+</div>
+
+<!-- Shortcuts Modal -->
+<div class="modal-overlay" id="shortcutsModal">
+    <div class="modal">
+        <div class="modal-title">快捷键</div>
+        <div class="shortcuts-grid">
+            <span class="shortcut-key">Ctrl+Enter</span><span>开始合成</span>
+            <span class="shortcut-key">Ctrl+S</span><span>下载音频</span>
+            <span class="shortcut-key">Ctrl+Shift+S</span><span>保存到历史</span>
+            <span class="shortcut-key">Ctrl+D</span><span>切换暗色模式</span>
+            <span class="shortcut-key">Esc</span><span>关闭弹窗</span>
+            <span class="shortcut-key">?</span><span>显示快捷键</span>
+        </div>
+        <button class="btn btn-block" style="margin-top: 20px;" id="closeShortcutsBtn">关闭</button>
+    </div>
+</div>
+
+<footer class="footer">
+    Powered by MiMo-V2.5-TTS | 当前限时免费 |
+    <a href="https://platform.xiaomimimo.com/docs/zh-CN/usage-guide/speech-synthesis-v2.5" target="_blank" style="color: var(--primary);">官方文档</a>
+</footer>
+
+<script type="module" src="/main.ts"></script>
+</body>
+</html>
