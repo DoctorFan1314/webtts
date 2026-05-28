@@ -1,19 +1,19 @@
 import type { ChatMessage, AudioConfig, SynthResponse, AudioFormat } from './types';
 
-const API_BASE = 'https://api.xiaomimimo.com/v1/chat/completions';
-
 export async function callSynthAPI(
+    apiBase: string,
     apiKey: string,
     model: string,
     messages: ChatMessage[],
     audio: AudioConfig,
     signal?: AbortSignal,
 ): Promise<SynthResponse> {
-    const response = await fetch(API_BASE, {
+    const url = apiBase.replace(/\/+$/, '') + '/chat/completions';
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'api-key': apiKey,
+            'Authorization': `Bearer ${apiKey}`,
         },
         body: JSON.stringify({ model, messages, audio }),
         signal,

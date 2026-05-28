@@ -3,6 +3,7 @@ import type { Settings, HistoryItem } from './types';
 const SETTINGS_KEY = 'webtts_settings';
 const HISTORY_KEY = 'webtts_history';
 const API_KEY_KEY = 'webtts_apikey';
+const API_BASE_KEY = 'webtts_apibase';
 const THEME_KEY = 'webtts_theme';
 
 const DEFAULT_SETTINGS: Settings = {
@@ -28,6 +29,14 @@ export function loadApiKey(): string {
 
 export function saveApiKey(key: string): void {
     localStorage.setItem(API_KEY_KEY, key);
+}
+
+export function loadApiBase(): string {
+    return localStorage.getItem(API_BASE_KEY) || 'https://api.xiaomimimo.com/v1';
+}
+
+export function saveApiBase(base: string): void {
+    localStorage.setItem(API_BASE_KEY, base);
 }
 
 export function loadHistory(): HistoryItem[] {

@@ -2,6 +2,19 @@
 
 > **[English Version](CHANGELOG.md)**
 
+## [2.5.1] - 2026-05-28
+
+### 新增
+
+- **可配置 API 地址** — 支持自定义 Base URL，适配不同网络环境
+  - 输入框位于 API Key 上方，默认值 `https://api.xiaomimimo.com/v1`
+  - 自动保存到 localStorage
+  - 兼容所有 OpenAI 协议的 MiMo API 端点
+
+### 变更
+
+- API 认证方式从 `api-key` 头改为标准 `Authorization: Bearer` 头
+
 ## [2.5.0] - 2026-05-28
 
 ### 新增

@@ -1,5 +1,5 @@
 import type { Settings, HistoryItem, SynthMode } from './types';
-import { loadSettings, loadHistory, saveSettings, saveHistory, saveApiKey } from './storage';
+import { loadSettings, loadHistory, saveSettings, saveHistory, saveApiKey, saveApiBase } from './storage';
 
 export const state = {
     settings: loadSettings(),
@@ -51,4 +51,14 @@ export function setApiKey(key: string): void {
     const el = document.getElementById('apiKey') as HTMLInputElement;
     if (el) el.value = key;
     saveApiKey(key);
+}
+
+export function getApiBase(): string {
+    return (document.getElementById('apiBase') as HTMLInputElement)?.value?.trim() || 'https://api.xiaomimimo.com/v1';
+}
+
+export function setApiBase(base: string): void {
+    const el = document.getElementById('apiBase') as HTMLInputElement;
+    if (el) el.value = base;
+    saveApiBase(base);
 }

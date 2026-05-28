@@ -6,6 +6,7 @@ A web-based text-to-speech studio powered by MiMo-V2.5-TTS. Built with TypeScrip
 
 ## Features
 
+- **Configurable API Base URL** — custom Base URL for different network environments
 - **Three Synthesis Modes**
   - Preset Voice: 8 built-in voices (4 Chinese, 4 English)
   - Voice Design: describe a custom voice with natural language

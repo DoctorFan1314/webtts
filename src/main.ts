@@ -1,6 +1,6 @@
 import './style.css';
 import { state, updateSettings } from './state';
-import { loadApiKey, saveApiKey } from './storage';
+import { loadApiKey, saveApiKey, loadApiBase, saveApiBase } from './storage';
 import { switchMode, updateCharCount } from './components/ui-helpers';
 import { initWaveVisualizer } from './components/wave';
 import { initVoiceDesign } from './components/voice-design';
@@ -17,7 +17,10 @@ import { initShortcuts, toggleTheme, loadSavedTheme } from './shortcuts';
 function init(): void {
     loadSavedTheme();
 
-    // Load saved API key
+    // Load saved API base and key
+    const savedBase = loadApiBase();
+    if (savedBase) (document.getElementById('apiBase') as HTMLInputElement).value = savedBase;
+
     const savedKey = loadApiKey();
     if (savedKey) (document.getElementById('apiKey') as HTMLInputElement).value = savedKey;
 
@@ -35,9 +38,11 @@ function init(): void {
 
     // Event bindings
     const textArea = document.getElementById('text') as HTMLTextAreaElement;
+    const apiBaseInput = document.getElementById('apiBase') as HTMLInputElement;
     const apiKeyInput = document.getElementById('apiKey') as HTMLInputElement;
 
     textArea?.addEventListener('input', updateCharCount);
+    apiBaseInput?.addEventListener('change', () => saveApiBase(apiBaseInput.value.trim()));
     apiKeyInput?.addEventListener('change', () => saveApiKey(apiKeyInput.value.trim()));
 
     // Mode switching

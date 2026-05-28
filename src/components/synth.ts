@@ -1,5 +1,5 @@
 import type { AudioFormat, ChatMessage } from '../types';
-import { state, addToHistory, getApiKey, setApiKey } from '../state';
+import { state, addToHistory, getApiKey, setApiKey, getApiBase, setApiBase } from '../state';
 import { callSynthAPI, decodeAudioData, buildMessages } from '../api';
 import { showStatus, getCurrentVoice, getCurrentFormat } from './ui-helpers';
 import { animateWave } from './wave';
@@ -7,12 +7,14 @@ import { renderHistory } from './history';
 import { synthesizeBatch } from './batch';
 
 export async function synthesize(): Promise<void> {
+    const apiBase = getApiBase();
     const apiKey = getApiKey();
     if (!apiKey) { showStatus('请输入 API Key', 'error'); return; }
+    setApiBase(apiBase);
     setApiKey(apiKey);
 
     if (state.isBatchMode) {
-        await synthesizeBatch(apiKey);
+        await synthesizeBatch(apiBase, apiKey);
         return;
     }
 
@@ -50,10 +52,11 @@ export async function synthesize(): Promise<void> {
         messages = buildMessages(style, text, state.isSingingMode);
     }
 
-    await doSynthesize(apiKey, model, messages, audioConfig as { format: AudioFormat; voice?: string; optimize_text_preview?: boolean }, text, style);
+    await doSynthesize(apiBase, apiKey, model, messages, audioConfig as { format: AudioFormat; voice?: string; optimize_text_preview?: boolean }, text, style);
 }
 
 async function doSynthesize(
+    apiBase: string,
     apiKey: string,
     model: string,
     messages: ChatMessage[],
@@ -74,7 +77,7 @@ async function doSynthesize(
     animateWave(true);
 
     try {
-        const response = await callSynthAPI(apiKey, model, messages, audioConfig, state.abortController.signal);
+        const response = await callSynthAPI(apiBase, apiKey, model, messages, audioConfig, state.abortController.signal);
 
         if (response.choices?.[0]?.message?.audio?.data) {
             const blob = decodeAudioData(response.choices[0].message.audio.data, audioConfig.format);

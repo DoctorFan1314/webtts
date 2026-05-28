@@ -2,6 +2,19 @@
 
 > **[中文版本](CHANGELOG_CN.md)**
 
+## [2.5.1] - 2026-05-28
+
+### Added
+
+- **Configurable API Base URL** — custom Base URL for different network environments
+  - Input field above API Key, default: `https://api.xiaomimimo.com/v1`
+  - Auto-saved to localStorage
+  - Compatible with all OpenAI-protocol MiMo API endpoints
+
+### Changed
+
+- API auth switched from `api-key` header to standard `Authorization: Bearer` header
+
 ## [2.5.0] - 2026-05-28
 
 ### Added

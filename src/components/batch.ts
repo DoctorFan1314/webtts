@@ -8,7 +8,7 @@ export function toggleBatchMode(): void {
     document.getElementById('batchSection')?.classList.toggle('show', state.isBatchMode);
 }
 
-export async function synthesizeBatch(apiKey: string): Promise<void> {
+export async function synthesizeBatch(apiBase: string, apiKey: string): Promise<void> {
     const rawText = (document.getElementById('batchText') as HTMLTextAreaElement)?.value.trim();
     if (!rawText) { showStatus('请输入批量文本', 'error'); return; }
 
@@ -31,7 +31,7 @@ export async function synthesizeBatch(apiKey: string): Promise<void> {
         try {
             const messages = buildMessages(style, segments[i], state.isSingingMode);
             const audioConfig = { format, voice };
-            const response = await callSynthAPI(apiKey, 'mimo-v2.5-tts', messages, audioConfig);
+            const response = await callSynthAPI(apiBase, apiKey, 'mimo-v2.5-tts', messages, audioConfig);
 
             if (response.choices?.[0]?.message?.audio?.data) {
                 const blob = decodeAudioData(response.choices[0].message.audio.data, format);
