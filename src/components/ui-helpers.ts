@@ -29,12 +29,16 @@ export function escapeHtml(text: string): string {
 
 export function switchMode(mode: SynthMode): void {
     state.currentMode = mode;
-    const modes: SynthMode[] = ['preset', 'design', 'clone'];
-    document.querySelectorAll<HTMLElement>('.mode-btn').forEach((btn, i) => {
-        btn.classList.toggle('active', modes[i] === mode);
+    document.querySelectorAll<HTMLElement>('.mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
     });
     document.querySelectorAll<HTMLElement>('.mode-panel').forEach(p => p.classList.remove('active'));
     document.getElementById('panel-' + mode)?.classList.add('active');
+}
+
+export function toggleCharCountVisibility(): void {
+    const el = document.querySelector('.char-count') as HTMLElement;
+    if (el) el.style.display = state.settings.charcount ? '' : 'none';
 }
 
 export function getCurrentVoice(): string {

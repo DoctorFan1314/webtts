@@ -3,6 +3,7 @@
     --primary-dark: #5a6fd6;
     --secondary: #764ba2;
     --bg: #f5f7fb;
+    --bg-secondary: #eef0f5;
     --card: #ffffff;
     --text: #333333;
     --text-secondary: #666666;
@@ -14,6 +15,7 @@
 }
 [data-theme="dark"] {
     --bg: #1a1a2e;
+    --bg-secondary: #1e2a4a;
     --card: #16213e;
     --text: #e0e0e0;
     --text-secondary: #a0a0a0;
@@ -357,3 +359,77 @@ audio { width: 100%; margin: 10px 0; border-radius: 8px; }
     padding: 3px 8px; background: var(--bg); border: 1px solid var(--border);
     border-radius: 4px; font-family: monospace; font-size: 12px; text-align: center;
 }
+
+/* Dark mode status colors */
+[data-theme="dark"] .status.loading { background: #3d3200; color: #ffd54f; }
+[data-theme="dark"] .status.success { background: #1b3a1b; color: #81c784; }
+[data-theme="dark"] .status.error { background: #3b1a1a; color: #ef9a9a; }
+[data-theme="dark"] .spinner { border-color: rgba(255, 255, 255, 0.15); }
+
+/* Focus visible styles */
+:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+button:focus-visible, .toggle:focus-visible, .style-tag:focus-visible,
+.dim-tag:focus-visible, .audio-tag:focus-visible, .template-card:focus-visible,
+.mode-btn:focus-visible, .tab:focus-visible, .voice-preset:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive: tablets and small screens */
+@media (max-width: 600px) {
+    .header { padding: 14px 16px; }
+    .logo { font-size: 24px; }
+    .header-subtitle { font-size: 12px; }
+    .main { padding: 16px 12px; gap: 16px; }
+    .card { padding: 16px; border-radius: 12px; }
+    .card-title { font-size: 16px; margin-bottom: 14px; }
+    .row { flex-wrap: wrap; }
+    .mode-btn { padding: 8px 4px; font-size: 12px; }
+    .mode-btn .mode-icon { font-size: 16px; }
+    .templates-grid { grid-template-columns: 1fr; }
+    .voice-presets { grid-template-columns: repeat(2, 1fr); }
+    .shortcuts-grid { grid-template-columns: 1fr; }
+    .btn { padding: 12px 20px; font-size: 14px; }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
+    .style-tags { gap: 6px; }
+    .style-tag { padding: 5px 10px; font-size: 11px; }
+    .history-btn { width: 32px; height: 32px; }
+    .modal { padding: 20px; }
+    .onboarding-card { padding: 24px; }
+    .icon-btn { width: 36px; height: 36px; font-size: 16px; }
+    textarea { min-height: 120px; }
+}
+
+@media (max-width: 400px) {
+    .header { padding: 10px 12px; }
+    .logo { font-size: 20px; }
+    .main { padding: 10px 8px; }
+    .card { padding: 12px; }
+    .voice-presets { grid-template-columns: 1fr 1fr; }
+    .download-actions { flex-direction: column; }
+    .download-actions .btn { width: 100%; justify-content: center; }
+}
+
+/* Toast notifications */
+.toast-container {
+    position: fixed; top: 20px; right: 20px; z-index: 3000;
+    display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none;
+}
+.toast {
+    padding: 12px 20px; border-radius: 8px; font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateX(120%); transition: transform 0.3s ease;
+    pointer-events: auto; max-width: 320px;
+}
+.toast.show { transform: translateX(0); }
+.toast-success { background: #d4edda; color: #155724; }
+.toast-error { background: #f8d7da; color: #721c24; }
+.toast-loading { background: #fff3cd; color: #856404; }
+[data-theme="dark"] .toast-success { background: #1b3a1b; color: #81c784; }
+[data-theme="dark"] .toast-error { background: #3b1a1a; color: #ef9a9a; }
+[data-theme="dark"] .toast-loading { background: #3d3200; color: #ffd54f; }

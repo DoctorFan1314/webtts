@@ -1,3 +1,4 @@
+import type { ChatMessage } from '../types';
 import { state, addToHistory } from '../state';
 import { callSynthAPI, decodeAudioData, buildMessages } from '../api';
 import { showStatus, getCurrentFormat } from './ui-helpers';
@@ -17,8 +18,31 @@ export async function synthesizeBatch(apiBase: string, apiKey: string): Promise<
 
     const style = (document.getElementById('style') as HTMLInputElement)?.value.trim() || '';
     const format = getCurrentFormat();
-    const voice = (document.getElementById('voice') as HTMLSelectElement)?.value || '冰糖';
     const btn = document.getElementById('synthesizeBtn') as HTMLButtonElement;
+
+    let model: string;
+    let voice: string;
+    let buildMsgs: (text: string) => ChatMessage[];
+
+    if (state.currentMode === 'design') {
+        const voiceDesc = (document.getElementById('voiceDesc') as HTMLTextAreaElement)?.value.trim() || '';
+        model = 'mimo-v2.5-tts-voicedesign';
+        voice = '';
+        buildMsgs = (text: string) => {
+            const msgs: ChatMessage[] = [{ role: 'user' as const, content: voiceDesc }];
+            if (!state.optimizeText) msgs.push({ role: 'assistant' as const, content: text });
+            if (style) msgs.unshift({ role: 'user' as const, content: style });
+            return msgs;
+        };
+    } else if (state.currentMode === 'clone') {
+        model = 'mimo-v2.5-tts-voiceclone';
+        voice = `data:${state.cloneMimeType};base64,${state.cloneBase64}`;
+        buildMsgs = (text: string) => buildMessages(style, text, state.isSingingMode);
+    } else {
+        model = 'mimo-v2.5-tts';
+        voice = (document.getElementById('voice') as HTMLSelectElement)?.value || '冰糖';
+        buildMsgs = (text: string) => buildMessages(style, text, state.isSingingMode);
+    }
 
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner"></div> 批量合成中...';
@@ -29,18 +53,21 @@ export async function synthesizeBatch(apiBase: string, apiKey: string): Promise<
 
     for (let i = 0; i < segments.length; i++) {
         try {
-            const messages = buildMessages(style, segments[i], state.isSingingMode);
-            const audioConfig = { format, voice };
-            const response = await callSynthAPI(apiBase, apiKey, 'mimo-v2.5-tts', messages, audioConfig);
+            const messages = buildMsgs(segments[i]);
+            const audioConfig = { format, voice, optimize_text_preview: state.optimizeText };
+            const response = await callSynthAPI(apiBase, apiKey, model, messages, audioConfig);
 
             if (response.choices?.[0]?.message?.audio?.data) {
-                const blob = decodeAudioData(response.choices[0].message.audio.data, format);
+                const audioBase64 = response.choices[0].message.audio.data;
+                const blob = decodeAudioData(audioBase64, format);
                 const url = URL.createObjectURL(blob);
-                addToHistory({
-                    id: Date.now() + i, text: segments[i], style, voice, format,
-                    audioUrl: url, mode: 'preset',
-                    timestamp: new Date().toLocaleString(),
-                });
+                if (state.settings.savehistory) {
+                    addToHistory({
+                        id: Date.now() + i, text: segments[i], style, voice, format,
+                        audioUrl: url, audioBase64, mode: state.currentMode,
+                        timestamp: new Date().toLocaleString(),
+                    });
+                }
                 successCount++;
             }
         } catch (err) {

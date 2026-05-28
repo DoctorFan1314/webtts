@@ -2,6 +2,35 @@
 
 > **[中文版本](CHANGELOG_CN.md)**
 
+## [0.0.1.2] - 2026-05-28
+
+### Added
+
+- **Toast notification system** — stackable, auto-dismiss notifications
+- **Wave sync with audio** — Web Audio API AnalyserNode drives visualization
+- **API timeout** — 60s auto-timeout to prevent infinite waiting
+- **History play button** — play audio directly from history (base64 persistence)
+- **Template overwrite confirmation** — confirm before loading template
+- **Onboarding back button** — navigate back in tutorial
+- **Focus-visible styles** — keyboard Tab navigation shows focus ring
+- **ARIA attributes** — toggle/modal/status accessible attributes
+- **Responsive layout** — 600px/400px breakpoints for mobile
+- **Dark mode improvements** — status colors, spinner adapted
+
+### Fixed
+
+- History audio broken after refresh (persisted as base64)
+- Import history button not responding
+- Shortcuts button not responding
+- charcount setting toggle had no effect
+- setStyle substring matching bug
+- localStorage parse without error handling
+- Object URL memory leak
+- savehistory setting never checked
+- Batch mode ignored design/clone modes
+- Mode switching used fragile array index
+- Modal backdrop click did not close
+
 ## [0.0.1.1] - 2026-05-28
 
 ### Added

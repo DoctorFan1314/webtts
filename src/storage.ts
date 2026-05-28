@@ -15,8 +15,12 @@ const DEFAULT_SETTINGS: Settings = {
 };
 
 export function loadSettings(): Settings {
-    const saved = localStorage.getItem(SETTINGS_KEY);
-    return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : { ...DEFAULT_SETTINGS };
+    try {
+        const saved = localStorage.getItem(SETTINGS_KEY);
+        return saved ? { ...DEFAULT_SETTINGS, ...JSON.parse(saved) } : { ...DEFAULT_SETTINGS };
+    } catch {
+        return { ...DEFAULT_SETTINGS };
+    }
 }
 
 export function saveSettings(settings: Settings): void {
@@ -40,8 +44,12 @@ export function saveApiBase(base: string): void {
 }
 
 export function loadHistory(): HistoryItem[] {
-    const saved = localStorage.getItem(HISTORY_KEY);
-    return saved ? JSON.parse(saved) : [];
+    try {
+        const saved = localStorage.getItem(HISTORY_KEY);
+        return saved ? JSON.parse(saved) : [];
+    } catch {
+        return [];
+    }
 }
 
 export function saveHistory(history: HistoryItem[]): void {

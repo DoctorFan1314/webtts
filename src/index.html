@@ -39,6 +39,7 @@
         </div>
         <div class="onboarding-actions">
             <button class="btn btn-outline btn-sm">跳过</button>
+            <button class="btn btn-outline btn-sm" id="onboardingPrevBtn" style="display:none">上一步</button>
             <button class="btn btn-sm" id="onboardingNextBtn">下一步</button>
         </div>
     </div>
@@ -50,9 +51,9 @@
         <div class="header-subtitle">语音合成工作室 v2.5</div>
     </div>
     <div class="header-actions">
-        <button class="icon-btn tooltip" data-tip="快捷键 (?)" data-action="shortcuts">⌨</button>
-        <button class="icon-btn tooltip" data-tip="使用帮助" data-action="help">?</button>
-        <button class="icon-btn tooltip" data-tip="切换主题" data-action="theme">◐</button>
+        <button class="icon-btn tooltip" data-tip="快捷键 (?)" data-action="shortcuts" aria-label="快捷键">⌨</button>
+        <button class="icon-btn tooltip" data-tip="使用帮助" data-action="help" aria-label="使用帮助">?</button>
+        <button class="icon-btn tooltip" data-tip="切换主题" data-action="theme" aria-label="切换主题">◐</button>
     </div>
 </header>
 
@@ -378,7 +379,7 @@
             <!-- Synthesize Button -->
             <button class="btn btn-block" id="synthesizeBtn">▶ 开始合成</button>
 
-            <div class="status" id="status"></div>
+            <div class="status" id="status" role="status" aria-live="polite"></div>
 
             <div class="player-section" id="playerSection">
                 <label>合成结果</label>
@@ -436,31 +437,31 @@
                 <div class="settings-group">
                     <div class="settings-label">
                         <div><div class="settings-title">自动播放</div><div class="settings-desc">合成完成后自动播放音频</div></div>
-                        <div class="toggle active" data-setting="autoplay"></div>
+                        <div class="toggle active" data-setting="autoplay" role="switch" aria-checked="true" aria-label="自动播放"></div>
                     </div>
                 </div>
                 <div class="settings-group">
                     <div class="settings-label">
                         <div><div class="settings-title">自动下载</div><div class="settings-desc">合成完成后自动下载音频</div></div>
-                        <div class="toggle" data-setting="autodownload"></div>
+                        <div class="toggle" data-setting="autodownload" role="switch" aria-checked="false" aria-label="自动下载"></div>
                     </div>
                 </div>
                 <div class="settings-group">
                     <div class="settings-label">
                         <div><div class="settings-title">保存历史</div><div class="settings-desc">自动保存合成记录</div></div>
-                        <div class="toggle active" data-setting="savehistory"></div>
+                        <div class="toggle active" data-setting="savehistory" role="switch" aria-checked="true" aria-label="保存历史"></div>
                     </div>
                 </div>
                 <div class="settings-group">
                     <div class="settings-label">
                         <div><div class="settings-title">显示字数统计</div><div class="settings-desc">显示字符数和预估时长</div></div>
-                        <div class="toggle active" data-setting="charcount"></div>
+                        <div class="toggle active" data-setting="charcount" role="switch" aria-checked="true" aria-label="显示字数统计"></div>
                     </div>
                 </div>
                 <div class="settings-group">
                     <div class="settings-label">
                         <div><div class="settings-title">首次显示引导</div><div class="settings-desc">下次打开时显示新手引导</div></div>
-                        <div class="toggle active" data-setting="onboarding"></div>
+                        <div class="toggle active" data-setting="onboarding" role="switch" aria-checked="true" aria-label="首次显示引导"></div>
                     </div>
                 </div>
             </div>
@@ -486,9 +487,9 @@
 </main>
 
 <!-- Help Modal -->
-<div class="modal-overlay" id="helpModal">
+<div class="modal-overlay" id="helpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle">
     <div class="modal">
-        <div class="modal-title">使用帮助</div>
+        <div class="modal-title" id="helpModalTitle">使用帮助</div>
         <div style="line-height: 1.8; font-size: 14px; color: var(--text-secondary);">
             <h3 style="color: var(--text); margin: 15px 0 10px;">快速开始</h3>
             <ol style="padding-left: 20px;">
@@ -513,9 +514,9 @@
 </div>
 
 <!-- Shortcuts Modal -->
-<div class="modal-overlay" id="shortcutsModal">
+<div class="modal-overlay" id="shortcutsModal" role="dialog" aria-modal="true" aria-labelledby="shortcutsModalTitle">
     <div class="modal">
-        <div class="modal-title">快捷键</div>
+        <div class="modal-title" id="shortcutsModalTitle">快捷键</div>
         <div class="shortcuts-grid">
             <span class="shortcut-key">Ctrl+Enter</span><span>开始合成</span>
             <span class="shortcut-key">Ctrl+S</span><span>下载音频</span>

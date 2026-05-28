@@ -17,6 +17,7 @@ export interface HistoryItem {
     voice: string;
     format: AudioFormat;
     audioUrl: string;
+    audioBase64?: string;
     mode: SynthMode;
     timestamp: string;
 }

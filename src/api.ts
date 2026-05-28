@@ -9,22 +9,34 @@ export async function callSynthAPI(
     signal?: AbortSignal,
 ): Promise<SynthResponse> {
     const url = apiBase.replace(/\/+$/, '') + '/chat/completions';
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({ model, messages, audio }),
-        signal,
-    });
 
-    if (!response.ok) {
-        const errorData: SynthResponse = await response.json().catch(() => ({}));
-        throw new Error(errorData.error?.message || `API 请求失败: ${response.status}`);
+    const timeoutController = new AbortController();
+    const timeoutId = setTimeout(() => timeoutController.abort(), 60000);
+
+    const combinedSignal = signal
+        ? AbortSignal.any([signal, timeoutController.signal])
+        : timeoutController.signal;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({ model, messages, audio }),
+            signal: combinedSignal,
+        });
+
+        if (!response.ok) {
+            const errorData: SynthResponse = await response.json().catch(() => ({}));
+            throw new Error(errorData.error?.message || `API 请求失败: ${response.status}`);
+        }
+
+        return response.json();
+    } finally {
+        clearTimeout(timeoutId);
     }
-
-    return response.json();
 }
 
 export function decodeAudioData(base64Data: string, format: AudioFormat): Blob {

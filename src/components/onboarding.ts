@@ -14,8 +14,11 @@ function updateOnboardingUI(): void {
         d.classList.toggle('active', i === state.onboardingStep);
     });
 
-    const btn = document.getElementById('onboardingNextBtn');
-    if (btn) btn.textContent = state.onboardingStep === 3 ? '开始使用' : '下一步';
+    const nextBtn = document.getElementById('onboardingNextBtn');
+    if (nextBtn) nextBtn.textContent = state.onboardingStep === 3 ? '开始使用' : '下一步';
+
+    const prevBtn = document.getElementById('onboardingPrevBtn');
+    if (prevBtn) prevBtn.style.display = state.onboardingStep === 0 ? 'none' : '';
 }
 
 export function onboardingNext(): void {
@@ -27,6 +30,13 @@ export function onboardingNext(): void {
     updateOnboardingUI();
 }
 
+export function onboardingPrev(): void {
+    if (state.onboardingStep > 0) {
+        state.onboardingStep--;
+        updateOnboardingUI();
+    }
+}
+
 export function onboardingSkip(): void {
     document.getElementById('onboarding')?.classList.remove('show');
     updateSettings({ onboarding: false });
@@ -34,5 +44,6 @@ export function onboardingSkip(): void {
 
 export function initOnboarding(): void {
     document.getElementById('onboardingNextBtn')?.addEventListener('click', onboardingNext);
+    document.getElementById('onboardingPrevBtn')?.addEventListener('click', onboardingPrev);
     document.querySelector('.onboarding-actions .btn-outline')?.addEventListener('click', onboardingSkip);
 }

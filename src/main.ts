@@ -1,7 +1,8 @@
 import './style.css';
+import type { SynthMode } from './types';
 import { state, updateSettings } from './state';
 import { loadApiKey, saveApiKey, loadApiBase, saveApiBase } from './storage';
-import { switchMode, updateCharCount } from './components/ui-helpers';
+import { switchMode, updateCharCount, toggleCharCountVisibility } from './components/ui-helpers';
 import { initWaveVisualizer } from './components/wave';
 import { initVoiceDesign } from './components/voice-design';
 import { initVoiceClone } from './components/voice-clone';
@@ -46,8 +47,11 @@ function init(): void {
     apiKeyInput?.addEventListener('change', () => saveApiKey(apiKeyInput.value.trim()));
 
     // Mode switching
-    document.querySelectorAll<HTMLElement>('.mode-btn').forEach((btn, i) => {
-        btn.addEventListener('click', () => switchMode(['preset', 'design', 'clone'][i] as 'preset' | 'design' | 'clone'));
+    document.querySelectorAll<HTMLElement>('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const mode = btn.dataset.mode as SynthMode;
+            if (mode) switchMode(mode);
+        });
     });
 
     // Synthesize button — use onclick only (synth.ts toggles onclick for cancel)
@@ -79,6 +83,8 @@ function init(): void {
             if (key in state.settings) {
                 updateSettings({ [key]: !state.settings[key] });
                 toggle.classList.toggle('active', state.settings[key]);
+                toggle.setAttribute('aria-checked', String(state.settings[key]));
+                if (key === 'charcount') toggleCharCountVisibility();
             }
         });
     });
@@ -105,11 +111,24 @@ function init(): void {
     });
 
     // Shortcuts modal
+    document.querySelector('.icon-btn[data-action="shortcuts"]')?.addEventListener('click', () => {
+        document.getElementById('shortcutsModal')?.classList.add('show');
+    });
     document.getElementById('closeShortcutsBtn')?.addEventListener('click', () => {
         document.getElementById('shortcutsModal')?.classList.remove('show');
     });
 
+    // Modal backdrop click to close
+    document.querySelectorAll<HTMLElement>('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) overlay.classList.remove('show');
+        });
+    });
+
     // Import history
+    document.getElementById('importHistoryBtn')?.addEventListener('click', () => {
+        document.getElementById('importHistoryFile')?.click();
+    });
     document.getElementById('importHistoryFile')?.addEventListener('change', (e) => {
         importHistory(e.target as HTMLInputElement);
     });
@@ -136,6 +155,7 @@ function init(): void {
 
     // Init char count
     updateCharCount();
+    toggleCharCountVisibility();
 
     // Init settings toggles state
     document.querySelectorAll<HTMLElement>('.toggle[data-setting]').forEach(toggle => {
@@ -155,10 +175,13 @@ function setStyle(style: string): void {
     const input = document.getElementById('style') as HTMLInputElement;
     if (!input) return;
     const current = input.value.trim();
-    if (current && !current.includes(style)) {
-        input.value = current + '，' + style;
-    } else if (!current) {
+    if (!current) {
         input.value = style;
+    } else {
+        const parts = current.split('，').map(s => s.trim());
+        if (!parts.includes(style)) {
+            input.value = current + '，' + style;
+        }
     }
     document.querySelectorAll<HTMLElement>('.style-tag').forEach(tag => {
         tag.classList.toggle('active', tag.dataset.style === style);

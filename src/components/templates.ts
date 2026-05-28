@@ -1,5 +1,5 @@
-import { state } from '../state';
-import { showStatus, updateCharCount } from './ui-helpers';
+import { updateCharCount, switchMode } from './ui-helpers';
+import { showToast } from './toast';
 
 interface Template {
     text: string;
@@ -44,18 +44,18 @@ export function useTemplate(type: string): void {
     const t = TEMPLATES[type];
     if (!t) return;
 
-    // Switch to preset mode
-    const presetBtns = document.querySelectorAll<HTMLElement>('.mode-btn');
-    presetBtns.forEach((btn, i) => btn.classList.toggle('active', i === 0));
-    document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('panel-preset')?.classList.add('active');
-    state.currentMode = 'preset';
+    const textArea = document.getElementById('text') as HTMLTextAreaElement;
+    if (textArea?.value.trim()) {
+        if (!confirm('加载模板将覆盖当前文本和风格，确定继续？')) return;
+    }
+
+    switchMode('preset');
 
     (document.getElementById('text') as HTMLTextAreaElement).value = t.text;
     (document.getElementById('style') as HTMLInputElement).value = t.style;
     (document.getElementById('voice') as HTMLSelectElement).value = t.voice;
     updateCharCount();
-    showStatus('已加载模板', 'success');
+    showToast('已加载模板', 'success');
 }
 
 export function initTemplates(): void {

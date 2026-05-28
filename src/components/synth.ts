@@ -80,7 +80,10 @@ async function doSynthesize(
         const response = await callSynthAPI(apiBase, apiKey, model, messages, audioConfig, state.abortController.signal);
 
         if (response.choices?.[0]?.message?.audio?.data) {
-            const blob = decodeAudioData(response.choices[0].message.audio.data, audioConfig.format);
+            const audioBase64 = response.choices[0].message.audio.data;
+            const blob = decodeAudioData(audioBase64, audioConfig.format);
+
+            if (state.currentAudioUrl) URL.revokeObjectURL(state.currentAudioUrl);
             const url = URL.createObjectURL(blob);
             state.currentAudioUrl = url;
 
@@ -96,19 +99,21 @@ async function doSynthesize(
             document.getElementById('playerSection')?.classList.add('show');
 
             if (state.settings.autoplay) {
-                audioPlayer?.play();
-                animateWave(true);
+                audioPlayer?.play().catch(() => {});
+                animateWave(true, audioPlayer ?? undefined);
             }
             if (state.settings.autodownload) {
                 setTimeout(() => downloadLink?.click(), 500);
             }
 
-            addToHistory({
-                id: Date.now(), text, style, voice: getCurrentVoice(),
-                format: audioConfig.format, audioUrl: url,
-                mode: state.currentMode, timestamp: new Date().toLocaleString(),
-            });
-            renderHistory();
+            if (state.settings.savehistory) {
+                addToHistory({
+                    id: Date.now(), text, style, voice: getCurrentVoice(),
+                    format: audioConfig.format, audioUrl: url, audioBase64,
+                    mode: state.currentMode, timestamp: new Date().toLocaleString(),
+                });
+                renderHistory();
+            }
             showStatus('合成成功！', 'success');
         } else {
             throw new Error('返回数据格式错误');
