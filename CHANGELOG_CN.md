@@ -15,6 +15,10 @@
 
 - API 认证方式从 `api-key` 头改为标准 `Authorization: Bearer` 头
 
+### 修复
+
+- 修复第二次点击合成按钮显示"已取消合成"的 bug（addEventListener 与 onclick 冲突）
+
 ## [2.5.0] - 2026-05-28
 
 ### 新增

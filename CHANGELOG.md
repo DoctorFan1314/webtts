@@ -15,6 +15,10 @@
 
 - API auth switched from `api-key` header to standard `Authorization: Bearer` header
 
+### Fixed
+
+- Fixed "synthesis cancelled" bug on second synthesize click (addEventListener vs onclick conflict)
+
 ## [2.5.0] - 2026-05-28
 
 ### Added

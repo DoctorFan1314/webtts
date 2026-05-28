@@ -50,8 +50,8 @@ function init(): void {
         btn.addEventListener('click', () => switchMode(['preset', 'design', 'clone'][i] as 'preset' | 'design' | 'clone'));
     });
 
-    // Synthesize button
-    document.getElementById('synthesizeBtn')?.addEventListener('click', () => synthesize());
+    // Synthesize button — use onclick only (synth.ts toggles onclick for cancel)
+    (document.getElementById('synthesizeBtn') as HTMLButtonElement).onclick = () => synthesize();
 
     // Player actions
     document.getElementById('copyUrlBtn')?.addEventListener('click', copyAudioUrl);
