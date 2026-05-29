@@ -2,6 +2,17 @@
 
 > **[中文版本](CHANGELOG_CN.md)**
 
+## [0.0.1.4] - 2026-05-28
+
+### Changed
+
+- **Global glassmorphism** — Cards/nav/modals/inputs/toasts all use frosted glass effect
+- **New color scheme** — Upgraded from periwinkle to Indigo/Violet/Pink
+- **Gradient background** — Page background uses blue-purple-pink gradient
+- **Feature card unique colors** — Each card has distinct gradient (cyan-blue/orange-red/emerald)
+- **Unified status colors** — Replaced Bootstrap defaults with Emerald/Amber/Red
+- **Dark mode polish** — Semi-transparent cards, glow shadows, gradient orbs
+
 ## [0.0.1.3] - 2026-05-28
 
 ### Added
