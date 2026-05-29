@@ -169,6 +169,42 @@ function init(): void {
     if (state.settings.onboarding) {
         showOnboarding();
     }
+
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    if (navbar) {
+        const onScroll = () => navbar.classList.toggle('scrolled', window.scrollY > 10);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    }
+
+    // Mobile nav toggle
+    document.getElementById('navToggle')?.addEventListener('click', () => {
+        document.getElementById('navLinks')?.classList.toggle('open');
+    });
+    // Close mobile nav on link click
+    document.querySelectorAll<HTMLElement>('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('navLinks')?.classList.remove('open');
+        });
+    });
+
+    // Hero wave animation
+    const heroWave = document.getElementById('heroWave');
+    if (heroWave) {
+        for (let i = 0; i < 50; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'wave-bar';
+            heroWave.appendChild(bar);
+        }
+        function animateHeroWave() {
+            heroWave!.querySelectorAll<HTMLElement>('.wave-bar').forEach(bar => {
+                bar.style.height = (Math.random() * 40 + 10) + 'px';
+            });
+            requestAnimationFrame(animateHeroWave);
+        }
+        animateHeroWave();
+    }
 }
 
 function setStyle(style: string): void {

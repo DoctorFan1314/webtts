@@ -2,6 +2,18 @@
 
 > **[中文版本](CHANGELOG_CN.md)**
 
+## [0.0.1.3] - 2026-05-28
+
+### Added
+
+- **Professional page layout** — Navbar + Hero + Features + Workspace + Footer
+- **Glassmorphism navbar** — Fixed top, scroll shadow, mobile hamburger menu
+- **Hero section** — Gradient title, animated waveform, CTA buttons, stats
+- **Features showcase** — 3-column cards for synthesis modes + extras row
+- **Professional footer** — 4-column layout (Product/Resources/Community/About)
+- **CSS design system** — Unified spacing/typography/radius/shadow tokens
+- **Responsive enhancement** — 768px tablet breakpoint + mobile nav
+
 ## [0.0.1.2] - 2026-05-28
 
 ### Added
